@@ -1,0 +1,21 @@
+{
+  "name": "htgist",
+  "version": "1.0.0",
+  "description": "A command-line tool that sends files up to GitHub Gist.",
+  "main": "htgist.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Bryan Borgeson",
+  "license": "Apache-2.0",
+  "bin": {
+    "htgist": "./htgist.js"
+  },
+  "dependencies": {
+    "co": "^4.6.0",
+    "co-prompt": "^1.0.0",
+    "commander": "^3.0.1",
+    "superagent": "^5.1.0"
+  }
+}
