@@ -37,9 +37,7 @@ program
                 }
             }
 
-            // TODO: Swap out superagent for axios.
             // TODO: Add an progress bar.
-            // TODO: Error handling.
             // TODO: Make it possible to send multiple files to a gist.
             request
                 .post("https://api.github.com/gists")
@@ -49,8 +47,25 @@ program
                 .set("x-github-otp", otp)
                 .auth(username, password)
                 .end((err, res) => {
-                    if (err) throw err;
-                    console.log(`Gist created: ${res.body.html_url}`);
+                    // "Happy" path ...
+                    if (!err && res.ok) {
+                        console.log(`Gist created: ${res.body.links.html.href}`);
+                        process.exit(0);
+                    }
+
+                    // Less "Happy" path ...
+                    let errorMsg;
+
+                    if (res && res.status === 401) {
+                        errorMessage = "Authentication failed! Better creds next time.";
+                    } else if (err) {
+                        errorMessage = err;
+                    } else {
+                        errorMessage = res.text;
+                    }
+
+                    console.log(errorMessage);
+                    process.exit(1);
                 });
         });
     })
