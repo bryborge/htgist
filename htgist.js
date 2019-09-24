@@ -27,6 +27,15 @@ program
             let username = program.username || (yield prompt("username: "));
             let password = program.password || (yield prompt.password("password: "));
             let otp = yield prompt("OTP: ");
+            let data = {
+                "description": "testing",
+                "public": false,
+                "files": {
+                    file: {
+                        "content": fs.readFileSync(file, "utf8")
+                    }
+                }
+            }
 
             // TODO: Swap out superagent for axios.
             // TODO: Add an progress bar.
@@ -34,15 +43,7 @@ program
             // TODO: Make it possible to send multiple files to a gist.
             request
                 .post("https://api.github.com/gists")
-                .send({
-                    "description": "testing",
-                    "public": false,
-                    "files": {
-                        file: {
-                            "content": fs.readFileSync(file, "utf8")
-                        }
-                    }
-                })
+                .send(data)
                 .set("Accept", "application/json")
                 .set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101 Firefox/68.0")
                 .set("x-github-otp", otp)
