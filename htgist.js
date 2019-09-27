@@ -10,13 +10,14 @@ const request = require("superagent");
 /**
  * Upload a file to GitHub Gists from the command line.
  *
- * Usage: htgist my-cool-file.md
+ * Usage: htgist my-cool-file.md -d "this is my cool gist description!"
  */
 program
     .arguments("<file>")
     .option("-u, --username <username>", "the user to authenticate as")
     .option("-p, --password <password>", "the user's password")
     .option("-o, --otp <otp>", "the user's one-time password (multi-factor authentication)")
+    .option("-d, --description <description>", "the description of the gist")
     .action((file) => {
         /**
          * Generator Functions
@@ -29,10 +30,9 @@ program
             let password = program.password || (yield prompt.password("password: "));
             let otp = yield prompt("OTP: ");
             let data = {
-                "description": "testing",
-                "public": false,
+                "description": program.description || "",
                 "files": {
-                    file: {
+                    [file]: {
                         "content": fs.readFileSync(file, "utf8")
                     }
                 }
@@ -40,6 +40,10 @@ program
 
             // TODO: Add a progress bar.
             // TODO: Make it possible to send multiple files to a gist.
+
+            /**
+             * DO the POST request to GitHub's API
+             */
             request
                 .post("https://api.github.com/gists")
                 .send(data)
@@ -50,7 +54,7 @@ program
                 .end((err, res) => {
                     // "Happy" path
                     if (!err && res.ok) {
-                        console.log(chalk.green("Gist Created: ") + res.body.html_url);
+                        console.log(chalk.bold.green("Gist Created: ") + res.body.html_url);
                         process.exit(0);
                     }
 
