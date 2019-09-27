@@ -1,5 +1,6 @@
 #!/usr/bin/env node --harmony
 
+const chalk = require("chalk");
 const co = require("co");
 const fs = require("fs");
 const program = require("commander");
@@ -37,7 +38,7 @@ program
                 }
             }
 
-            // TODO: Add an progress bar.
+            // TODO: Add a progress bar.
             // TODO: Make it possible to send multiple files to a gist.
             request
                 .post("https://api.github.com/gists")
@@ -47,24 +48,24 @@ program
                 .set("x-github-otp", otp)
                 .auth(username, password)
                 .end((err, res) => {
-                    // "Happy" path ...
+                    // "Happy" path
                     if (!err && res.ok) {
-                        console.log(`Gist created: ${res.body.links.html.href}`);
+                        console.log(chalk.green("Gist Created: ") + res.body.html_url);
                         process.exit(0);
                     }
 
-                    // Less "Happy" path ...
+                    // Less "Happy" path
                     let errorMsg;
 
                     if (res && res.status === 401) {
-                        errorMessage = "Authentication failed! Better creds next time.";
+                        errorMsg = "Authentication failed! Better creds next time.";
                     } else if (err) {
-                        errorMessage = err;
+                        errorMsg = err;
                     } else {
-                        errorMessage = res.text;
+                        errorMsg = res.text;
                     }
 
-                    console.log(errorMessage);
+                    console.log(chalk.red(errorMsg));
                     process.exit(1);
                 });
         });
