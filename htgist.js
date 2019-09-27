@@ -26,10 +26,13 @@ program
          * Read more: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*
          */
         co(function* () {
+            // Credentials
             let username = program.username || (yield prompt("username: "));
             let password = program.password || (yield prompt.password("password: "));
             let otp = yield prompt("OTP: ");
-            let data = {
+
+            // The Payload
+            let payload = {
                 "description": program.description || "",
                 "files": {
                     [file]: {
@@ -38,15 +41,12 @@ program
                 }
             }
 
-            // TODO: Add a progress bar.
-            // TODO: Make it possible to send multiple files to a gist.
-
             /**
              * DO the POST request to GitHub's API
              */
             request
                 .post("https://api.github.com/gists")
-                .send(data)
+                .send(payload)
                 .set("Accept", "application/json")
                 .set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101 Firefox/68.0")
                 .set("x-github-otp", otp)
