@@ -15,12 +15,12 @@ prerequisites are minimal and installation is relatively straightforward.
 
 ### Prerequisites
 
-The following technologies listed are required to be installed on your system before this project will work.
+The following technologies are required to be installed on your system before this project will work.
 
 1.  [Node](https://nodejs.org/) - The JavaScript Runtime
 1.  [npm](https://www.npmjs.com/) - The package manager for Node
 
-Please refer to the `.nvmrc` file for the specific version of node used in this project.
+Please refer to the `.node-version` file for the specific version of node used in this project.
 
 ### Installation
 
